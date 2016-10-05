@@ -1,0 +1,116 @@
+FORGE
+  remote: https://forgeapi.puppetlabs.com
+  specs:
+    arioch-redis (1.2.3)
+      puppetlabs-apt (< 3.0.0, >= 2.0.1)
+      puppetlabs-stdlib (< 5.0.0, >= 1.0.2)
+      stahnma-epel (< 2.0.0, >= 1.0.2)
+    darin-zypprepo (1.0.2)
+    example42-logrotate (2.0.19)
+      example42-puppi (>= 2.0.0)
+    example42-puppi (2.2.1)
+    jfryman-selinux (0.4.0)
+      puppetlabs-stdlib (>= 0)
+    lwf-remote_file (1.1.3)
+    puppet-archive (1.1.2)
+      puppetlabs-stdlib (< 5.0.0, >= 4.2.0)
+    puppet-staging (1.0.7)
+    puppetlabs-apt (2.3.0)
+      puppetlabs-stdlib (< 5.0.0, >= 4.5.0)
+    puppetlabs-concat (2.2.0)
+      puppetlabs-stdlib (< 5.0.0, >= 4.2.0)
+    puppetlabs-firewall (1.8.1)
+    puppetlabs-java (1.6.0)
+      puppetlabs-stdlib (< 5.0.0, >= 2.4.0)
+    puppetlabs-ntp (4.2.0)
+      puppetlabs-stdlib (< 5.0.0, >= 4.6.0)
+    puppetlabs-rabbitmq (5.5.0)
+      puppet-staging (< 2.0.0, >= 0.3.1)
+      puppetlabs-apt (< 3.0.0, >= 1.8.0)
+      puppetlabs-stdlib (< 5.0.0, >= 3.0.0)
+    puppetlabs-ruby (0.5.0)
+      puppetlabs-stdlib (< 5.0.0, >= 3.2.0)
+    puppetlabs-stdlib (4.12.0)
+    rtyler-jenkins (1.7.0)
+      darin-zypprepo (< 2.0.0, >= 1.0.1)
+      puppet-archive (>= 0.4.8)
+      puppetlabs-apt (< 3.0.0, >= 0.0.3)
+      puppetlabs-java (< 2.0.0, >= 1.0.1)
+      puppetlabs-stdlib (< 5.0.0, >= 4.6.0)
+    saz-ssh (2.9.1)
+      puppetlabs-concat (>= 1.0.0)
+      puppetlabs-stdlib (>= 2.2.1)
+    sensu-sensu (2.1.0)
+      lwf-remote_file (< 2.0.0, >= 1.0.0)
+      puppetlabs-apt (< 3.0.0, >= 2.0.0)
+      puppetlabs-stdlib (< 5.0.0, >= 3.2.0)
+    stahnma-epel (1.2.2)
+      puppetlabs-stdlib (>= 3.0.0)
+    stankevich-python (1.17.0)
+      puppetlabs-stdlib (< 6.0.0, >= 4.6.0)
+      stahnma-epel (< 2.0.0, >= 1.2.2)
+    thias-sysctl (1.0.6)
+    thias-tuned (1.0.3)
+    vshn-gitlab (1.10.0)
+      puppetlabs-apt (< 3.0.0, >= 2.1.0)
+      puppetlabs-stdlib (~> 4.0)
+    yelp-uchiwa (1.0.1)
+      puppetlabs-apt (< 3.0.0, >= 2.0.0)
+      puppetlabs-stdlib (>= 0)
+
+GIT
+  remote: https://github.com/example42/puppet-yum.git
+  ref: master
+  sha: a78f786199b39fc2996386ab4125d4fea8972357
+  specs:
+    example42-yum (2.1.27)
+      example42-puppi (>= 2.0.0)
+
+GIT
+  remote: https://github.com/jfryman/puppet-nginx.git
+  ref: master
+  sha: de4e7390b09228b05941530f2cd5c3e6d73763d0
+  specs:
+    jfryman-nginx (0.4.1-rc0)
+      puppetlabs-apt (< 3.0.0, >= 1.8.0)
+      puppetlabs-concat (< 3.0.0, >= 1.1.1)
+      puppetlabs-stdlib (< 5.0.0, >= 4.2.0)
+
+GIT
+  remote: https://github.com/jlambert121/jlambert121-puppet.git
+  ref: master
+  sha: e641f20c41f1666134e9ae5a745da83c875f372f
+  specs:
+    jlambert121-puppet (0.8.2)
+      puppetlabs-concat (< 3.0.0, >= 1.1.0)
+      puppetlabs-firewall (< 2.0.0, >= 1.2.0)
+      puppetlabs-stdlib (< 5.0.0, >= 4.2.0)
+
+GIT
+  remote: https://github.com/tylerwalts/puppet-jdk_oracle.git
+  ref: master
+  sha: d8e4a999376f80ca5414ce86272f55e3a7db433f
+  specs:
+    tylerwalts-jdk_oracle (1.5.0)
+
+DEPENDENCIES
+  arioch-redis (>= 0)
+  example42-logrotate (>= 0)
+  example42-yum (>= 0)
+  jfryman-nginx (>= 0)
+  jfryman-selinux (>= 0)
+  jlambert121-puppet (>= 0)
+  puppetlabs-firewall (>= 0)
+  puppetlabs-ntp (>= 0)
+  puppetlabs-rabbitmq (>= 0)
+  puppetlabs-ruby (>= 0)
+  rtyler-jenkins (>= 0)
+  saz-ssh (>= 0)
+  sensu-sensu (>= 0)
+  stankevich-python (>= 0)
+  thias-sysctl (>= 0)
+  thias-tuned (>= 0)
+  tylerwalts-jdk_oracle (>= 0)
+  vshn-gitlab (>= 0)
+  yelp-uchiwa (>= 0)
+

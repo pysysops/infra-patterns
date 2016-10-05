@@ -1,0 +1,28 @@
+forge "https://forgeapi.puppetlabs.com"
+
+# From le forge
+mod 'thias-sysctl'
+mod 'thias-tuned'
+mod 'jfryman-selinux'
+mod 'example42-logrotate'
+mod 'puppetlabs-firewall'
+mod 'puppetlabs-ntp'
+mod 'saz-ssh'
+mod 'arioch-redis'
+mod 'puppetlabs-rabbitmq'
+mod 'sensu-sensu'
+mod 'yelp-uchiwa'
+mod 'vshn-gitlab'
+mod 'stankevich-python'
+mod 'puppetlabs-ruby'
+mod 'rtyler-jenkins'
+
+# From le Github
+mod 'jfryman-nginx',
+  :git => "https://github.com/jfryman/puppet-nginx.git"
+mod "tylerwalts-jdk_oracle",
+  :git => "https://github.com/tylerwalts/puppet-jdk_oracle.git"
+mod 'example42-yum',
+  :git => "https://github.com/example42/puppet-yum.git"
+mod 'jlambert121-puppet',
+  :git => "https://github.com/jlambert121/jlambert121-puppet.git"

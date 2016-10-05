@@ -1,0 +1,173 @@
+# The base of this is borrowed from wikimedia's puppet repo
+# Licensed under GPL
+# Source: https://git.wikimedia.org/blob/operations%2Fpuppet.git/production/rakefile
+begin
+ require 'psych'
+ rescue ::LoadError
+end
+
+require 'fileutils'
+require 'yaml'
+
+# Functions that tasks use
+def run_puppet_lint(manifests)
+  manifests.each do |manifest|
+    sh "puppet-lint --fail-on-warnings --no-80chars-check \"#{manifest}\""
+  end
+end
+
+def run_puppet_parser_validation(*manifests)
+  manifests = manifests.join(' ')
+  sh "puppet parser --verbose validate #{$puppetcolor} #{manifests}"
+end
+
+def run_module_spec(module_name)
+  puts '-' * 80
+  puts "Running rspec tests for module #{module_name}"
+  puts '-' * 80
+
+  Dir.chdir("modules/#{module_name}") do
+    FileUtils.rm_rf("spec/fixtures") if Dir.exists?("spec/fixtures")
+    Dir.mkdir("spec/fixtures")
+    File.symlink("../../../../modules", "spec/fixtures/modules")
+    File.symlink("../../../../hiera", "spec/fixtures/hiera")
+
+    Dir.mkdir("spec/fixtures/manifests")
+    File.write("spec/fixtures/manifests/site.pp", "")
+
+    puts "Invoking tests on module #{module_name}"
+    system('rake spec')
+  end
+end
+
+# Tasks
+task :default => [:help]
+
+desc 'Display help'
+task :help do
+  puts "
+---[Command line options]----------------------------------------------
+`rake -T` : list available tasks
+`rake -P` : shows tasks dependencies
+
+---[Available rake tasks]----------------------------------------------"
+  system "rake -T"
+puts '-' * 80
+puts "
+Examples:
+
+Validate syntax for all puppet manifests:
+  rake validate
+
+Run puppet style checker:
+  rake lint
+
+Build docs:
+  rake doc
+
+Run specs (unit tests):
+  rake spec
+"
+end
+
+desc "Validate the yaml files"
+task :validate_yamal => :validate_yaml
+task :validate_yaml do
+  FileList["hiera/**/*.yaml"].each do |yamlfile|
+    begin
+      YAML::load_file(yamlfile)
+    rescue Exception => e
+      raise "ruby failed to validate yaml file #{yamlfile}: #{e.message}"
+    else
+      puts "[OK] #{yamlfile} loads ok!"
+    end
+  end
+end
+
+desc "Validate style in puppet files"
+task :lint do
+  success = run_puppet_lint ["manifests/site.pp", "manifests/vagrant.pp"]
+
+  # Just our modules
+  [ 'site-modules/roles', 'site-modules/profiles' ].each do |dir|
+    puts "Validating manifests in '#{dir}'"
+    ok = run_puppet_lint Dir.glob("#{dir}/**/*.pp")
+    success = success && ok
+  end
+
+  if success
+    puts "[OK] files lint ok!"
+  else
+    raise "puppet failed to lint files (exit: #{res.exitstatus}"
+  end
+end
+
+desc "Build documentation"
+task :doc do
+  FileUtils.rm_rf "doc"
+  doc_cmd = ["puppet", "doc",
+    "--mode rdoc",
+    "--all",
+    "--manifestdir manifests",
+    "--modulepath modules",
+  ].join(' ')
+  puts "Running #{doc_cmd}"
+  system(doc_cmd)
+end
+
+desc "Validate syntax in puppet files"
+task :validate, [:files] do |t, args|
+  success = true
+
+  if args.files
+    puts "Validating " + args.files.inspect
+    ok = run_puppet_parser_validation args.files
+  else
+    ok = run_puppet_parser_validation 'manifests/site.pp'
+    success = success && ok
+
+    ['site-modules/roles', 'site-modules/profiles'].each do |dir|
+      puts "Validating manifests in '#{dir}'"
+      ok = run_puppet_parser_validation Dir.glob("#{dir}/**/")
+      success = success && ok
+    end
+  end
+
+  if success
+    puts "[OK] files validate ok!"
+  else
+    raise "puppet failed to validate files (exit: #{res.exitstatus}"
+  end
+end
+
+desc "Run spec tests found in modules"
+task :spec do
+  # Hold a list of modules not passing tests
+  failed_modules = []
+
+  # Invoke rake whenever a module has a Rakefile
+  #FileList["modules/*/Rakefile"].each do |rakefile|
+  # Only for our own module.
+  FileList["modules/**/Rakefile"].each do |rakefile|
+
+    module_name = rakefile.match('modules/(.+)/')[1]
+
+    if not run_module_spec(module_name)
+      failed_modules << module_name  # recording
+    end
+    puts "\n"
+
+    FileUtils.rm_rf("modules/#{module_name}/spec/fixtures")
+  end
+
+  puts '-' * 80
+  puts 'Finished running tests for all modules'
+  puts '-' * 80
+
+  unless failed_modules.empty?
+    puts "\nThe following modules are NOT passing tests:\n"
+    puts '- ' + failed_modules * "\n- "
+    puts
+    raise "Some modules had failures, sorry."
+  end
+end

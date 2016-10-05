@@ -1,0 +1,29 @@
+---
+:backends: yaml
+:merge_behavior: native
+:yaml:
+  :datadir: "/etc/puppetlabs/code/environments/%{::environment}/hiera"
+:hierarchy:
+  # Vagrant
+  - "vagrant/%{::fqdn}"
+  - vagrant
+
+  # Individual node - use sparingly
+  - "node/%{::fqdn}"
+
+  # Environment overrides
+  - "env/%{::server_env}/%{::server_type}"
+  - "env/%{::server_env}"
+
+  # Server Types - git, ci, cm, dns, prx
+  - "type/${::server_type}"
+
+  # Hosts
+  - hosts
+
+  # Users
+  - users
+
+  # Common
+  - common
+:logger: console
